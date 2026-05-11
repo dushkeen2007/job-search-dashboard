@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job search</title>
+  <style>
+
+    /* ============================================
+       Brenda Lara Design System — Token CSS
+       ============================================ */
+
+    :root {
+      --color-bg:               #ffffff;
+      --color-surface:          hsl(40, 20%, 97%);
+
+      --color-heading-1:        hsl(38, 31%, 4%);
+      --color-heading-2:        hsl(212, 66%, 27%);
+      --color-text:             hsl(201, 6%, 43%);
+
+      --color-accent:           hsl(212, 80%, 33%);
+      --color-accent-hover:     hsl(212, 80%, 26%);
+      --color-link:             hsl(212, 66%, 27%);
+      --color-link-hover:       hsla(0, 0%, 7%, 0.9);
+
+      --color-border:           hsl(0, 0%, 88%);
+      --color-border-strong:    hsl(0, 0%, 75%);
+
+      --color-badge-new-bg:     #e6f1fb;
+      --color-badge-new-text:   #0c447c;
+      --color-badge-saved-bg:   #eaf3de;
+      --color-badge-saved-text: #27500a;
+      --color-badge-applied-bg: #faeeda;
+      --color-badge-applied-text: #633806;
+
+      --color-card-bg:          #faf6f1;
+      --color-card-toc-bg:      #faf9f7;
+      --color-card-toc-hover:   #f0ece6;
+
+      --font-primary:           "Helvetica Neue", Arial, sans-serif;
+
+      --text-h1:                1.8em;
+      --text-h2:                1.4em;
+      --text-h3:                1.1em;
+      --text-body:              15px;
+      --text-small:             13px;
+      --text-label:             11px;
+
+      --weight-heading:         700;
+      --weight-medium:          600;
+      --weight-body:            400;
+
+      --leading-heading:        1.2em;
+      --leading-body:           2em;
+      --leading-comfortable:    1.7;
+      --leading-tight:          1.5;
+
+      --tracking-label:         0.08em;
+
+      --space-xs:               8px;
+      --space-sm:               16px;
+      --space-md:               24px;
+      --space-lg:               40px;
+      --space-xl:               50px;
+      --space-2xl:              80px;
+
+      --site-max-width:         1000px;
+      --page-padding:           50px;
+      --grid-gap:               12px;
+
+      --border-thin:            1px solid hsl(0, 0%, 88%);
+      --radius-sm:              2px;
+      --radius-md:              8px;
+      --radius-lg:              12px;
+
+      /* Aliases used by component CSS */
+      --color-background-primary:   var(--color-bg);
+      --color-background-secondary: var(--color-surface);
+      --color-text-primary:         var(--color-heading-1);
+      --color-text-secondary:       var(--color-text);
+      --color-border-secondary:     var(--color-border);
+      --color-border-tertiary:      hsl(0, 0%, 92%);
+    }
+
+    /* ============================================
+       Base
+       ============================================ */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-primary);
+      font-size: var(--text-body);
+      font-weight: var(--weight-body);
+      color: var(--color-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================
+       Page shell
+       ============================================ */
+
+    .page-wrap {
+      max-width: var(--site-max-width);
+      margin: 0 auto;
+      padding: var(--space-lg) var(--page-padding) var(--space-2xl);
+    }
+
+    .page-header {
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-md);
+      border-bottom: var(--border-thin);
+    }
+
+    .page-title {
+      font-size: var(--text-h2);
+      font-weight: var(--weight-heading);
+      color: var(--color-heading-1);
+      line-height: var(--leading-heading);
+      margin-bottom: var(--space-xs);
+    }
+
+
+
+    /* ============================================
+       Filter bar (from components.md)
+       ============================================ */
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .filter-label {
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      white-space: nowrap;
+      margin-right: 2px;
+    }
+
+    .pill-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 0.5px solid var(--color-border-secondary);
+      font-size: 12px;
+      color: var(--color-text-primary);
+      background: var(--color-background-primary);
+      cursor: pointer;
+      font-family: var(--font-primary);
+      transition: background 0.1s, color 0.1s, border-color 0.1s;
+    }
+
+    .filter-pill:hover:not(.active) {
+      background: var(--color-surface);
+    }
+
+    .filter-pill.active {
+      background: hsl(212, 80%, 33%);
+      color: #fff;
+      border-color: hsl(212, 80%, 33%);
+    }
+
+    .btn-more-filters {
+      padding: 5px 14px;
+      border-radius: 8px;
+      border: 0.5px solid hsl(212, 80%, 33%);
+      font-size: 12px;
+      color: hsl(212, 80%, 33%);
+      background: var(--color-background-primary);
+      cursor: pointer;
+      margin-left: auto;
+      font-family: var(--font-primary);
+      white-space: nowrap;
+      transition: background 0.1s;
+    }
+
+    .btn-more-filters:hover {
+      background: var(--color-badge-new-bg);
+    }
+
+    .dropdown-panel {
+      border: 0.5px solid var(--color-border-secondary);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      background: var(--color-background-primary);
+      margin-bottom: 16px;
+    }
+
+    .dropdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .field-label {
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 0.5px solid var(--color-border-secondary);
+      font-size: 12px;
+      color: var(--color-text-primary);
+      background: var(--color-background-primary);
+      font-family: var(--font-primary);
+      cursor: pointer;
+    }
+
+    .dropdown-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 0.5px solid var(--color-border-tertiary);
+    }
+
+    .btn-clear {
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--color-text-secondary);
+      font-family: var(--font-primary);
+    }
+
+    .btn-clear:hover {
+      color: var(--color-text-primary);
+    }
+
+    .btn-apply {
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      background: hsl(212, 80%, 33%);
+      color: #fff;
+      border: none;
+      font-family: var(--font-primary);
+    }
+
+    .btn-apply:hover {
+      background: var(--color-accent-hover);
+    }
+
+    /* ============================================
+       Job cards (from components.md)
+       ============================================ */
+
+    .listings-wrap {
+      margin-top: var(--space-md);
+    }
+
+    .listings-count {
+      font-size: var(--text-small);
+      color: var(--color-text);
+      margin-bottom: var(--space-sm);
+    }
+
+    .job-card {
+      background: var(--color-card-bg);
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 12px;
+    }
+
+    .job-card.applied {
+      opacity: 0.6;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+
+    .role-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin: 0 0 3px 0;
+    }
+
+    .company-name {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    .seniority-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 5px;
+      background: var(--color-background-secondary);
+      color: var(--color-text-secondary);
+      margin-left: 8px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-new     { background: var(--color-badge-new-bg);     color: var(--color-badge-new-text); }
+    .badge-saved   { background: var(--color-badge-saved-bg);   color: var(--color-badge-saved-text); }
+    .badge-applied { background: var(--color-badge-applied-bg); color: var(--color-badge-applied-text); }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .meta-item {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    .glassdoor {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    .star { color: #e88c00; font-size: 12px; }
+
+    .linkedin-note {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      font-style: italic;
+      margin-left: 4px;
+    }
+
+    .card-divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border-tertiary);
+      margin: 12px 0;
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      border: 0.5px solid var(--color-border-secondary);
+      background: var(--color-background-primary);
+      color: var(--color-text-primary);
+      font-family: var(--font-primary);
+      transition: background 0.1s;
+    }
+
+    .btn:hover {
+      background: var(--color-surface);
+    }
+
+    .btn-primary {
+      background: hsl(212, 80%, 33%);
+      color: #fff;
+      border-color: hsl(212, 80%, 33%);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-accent-hover);
+    }
+
+    .btn-ghost {
+      border-color: transparent;
+      color: var(--color-text-secondary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--color-surface);
+      color: var(--color-text-primary);
+    }
+
+    .applied-date {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--color-text-secondary);
+      flex-shrink: 0;
+    }
+
+    .loading-state,
+    .error-state {
+      font-size: var(--text-body);
+      color: var(--color-text);
+      padding: var(--space-lg) 0;
+    }
+
+    /* hidden utility */
+    .hidden { display: none; }
+
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- Page header -->
+  <header class="page-header">
+    <img src="Brenda_Lara_Studios_logo_Facebook.png" alt="Brenda Lara Studios" style="max-height:100px;display:block;margin-bottom:16px;">
+    <h2 class="page-title">Product designer job search feed</h2>
+  </header>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <span class="filter-label">Posted</span>
+    <div class="pill-group" id="date-pills">
+      <span class="filter-pill active" data-group="date">All</span>
+      <span class="filter-pill" data-group="date">Last 7 days</span>
+      <span class="filter-pill" data-group="date">Last 14 days</span>
+      <span class="filter-pill" data-group="date">Last 30 days</span>
+    </div>
+    <button class="btn-more-filters" id="toggle-filters">More filters ↓</button>
+  </div>
+
+  <!-- Expanded filter panel -->
+  <div class="dropdown-panel hidden" id="filter-panel">
+    <div class="dropdown-grid">
+      <div>
+        <div class="field-label">Location type</div>
+        <select class="filter-select" id="filter-location">
+          <option value="any">Any</option>
+          <option value="remote">Remote</option>
+          <option value="hybrid">Hybrid</option>
+          <option value="on-site">On-site</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">Minimum salary</div>
+        <select class="filter-select" id="filter-salary">
+          <option value="0">Any</option>
+          <option value="160">$160k+</option>
+          <option value="180">$180k+</option>
+          <option value="200">$200k+</option>
+          <option value="220">$220k+</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">Status</div>
+        <select class="filter-select" id="filter-status">
+          <option value="all">All</option>
+          <option value="applied">Applied</option>
+          <option value="dismissed">Dismissed</option>
+        </select>
+      </div>
+    </div>
+    <div class="dropdown-footer">
+      <button class="btn-clear">Clear all</button>
+      <button class="btn-apply">Apply filters</button>
+    </div>
+  </div>
+
+  <!-- Listings -->
+  <div class="listings-wrap">
+    <p class="listings-count"></p>
+    <div id="cards-container">
+      <p class="loading-state">Loading roles...</p>
+    </div>
+  </div><!-- /listings-wrap -->
+</div><!-- /page-wrap -->
+
+<script>
+  // ── Persistent state ──────────────────────────────────────
+  const dismissedIds  = new Set(JSON.parse(localStorage.getItem('dismissedCards') || '[]'));
+  const appliedState  = JSON.parse(localStorage.getItem('appliedCards') || '{}');
+  const lastVisit     = localStorage.getItem('lastVisit');
+  const lastVisitTime = lastVisit ? new Date(lastVisit).getTime() : 0;
+
+  const EXCLUDE = ['engineer','developer','manager','director','researcher',
+                   'writer','intern','junior','coordinator'];
+  const INCLUDE = ['product designer','ux designer','ui designer','staff designer',
+                   'principal designer','senior designer','senior product','lead designer'];
+
+  const GH_SLUGS = ['figma','stripe','vercel','airtable','webflow',
+                    'brex','intercom','dropbox','mercury','descript','typeform'];
+  const GH_NAMES = { figma:'Figma', stripe:'Stripe', vercel:'Vercel',
+                     airtable:'Airtable', webflow:'Webflow', brex:'Brex',
+                     intercom:'Intercom', dropbox:'Dropbox', mercury:'Mercury',
+                     descript:'Descript', typeform:'Typeform' };
+
+  const ASHBY_SLUGS = ['notion','linear','ramp','fathom.video','dovetail'];
+  const ASHBY_NAMES = { notion:'Notion', linear:'Linear', ramp:'Ramp',
+                        'fathom.video':'Fathom', dovetail:'Dovetail' };
+
+// ── Boot ──────────────────────────────────────────────────
+  setupFilterUI();
+  fetchJobs();
+  setInterval(fetchJobs, 30 * 60 * 1000);
+
+  // ── Fetch all sources simultaneously ──────────────────────
+  async function fetchJobs() {
+    const [greenhouse, ashby] = await Promise.allSettled([
+      fetchGreenhouse(),
+      fetchAshby()
+    ]);
+
+    const sources = [greenhouse, ashby];
+
+    if (sources.every(r => r.status === 'rejected')) {
+      document.getElementById('cards-container').innerHTML =
+        '<p class="error-state">Could not load roles. Check your connection and try again.</p>';
+
+      document.querySelector('.listings-count').textContent = '';
+      return;
+    }
+
+    const sourceNames = ['Greenhouse', 'Ashby'];
+    const sourcedJobs = [greenhouse, ashby].map((r, i) => ({
+      name: sourceNames[i],
+      jobs: r.status === 'fulfilled' ? r.value : []
+    }));
+
+    sourcedJobs.forEach(({ name, jobs }) => {
+      console.group(`[${name}] first 10 titles (before filtering)`);
+      jobs.slice(0, 10).forEach(j => console.log(`  ${j.company} — ${j.title}`));
+      console.groupEnd();
+    });
+
+    let jobs = sourcedJobs.flatMap(s => s.jobs);
+
+    jobs = jobs.filter(j => passesTitle(j.title));
+    jobs = jobs.filter(j => j.isRemote || isUSOrRemote(j.location));
+
+    const byCo = {};
+    jobs.forEach(j => { byCo[j.company] = (byCo[j.company] || 0) + 1; });
+    console.group('[After filtering] roles per company');
+    Object.entries(byCo).sort((a,b) => b[1]-a[1]).forEach(([co,n]) => console.log(`  ${co}: ${n}`));
+    console.groupEnd();
+
+    jobs = deduplicate(jobs);
+    jobs.sort((a, b) => a.posted - b.posted);
+
+    renderCards(jobs);
+  }
+
+  async function fetchGreenhouse() {
+    const fetches = await Promise.allSettled(
+      GH_SLUGS.map(slug =>
+        fetch(`https://boards-api.greenhouse.io/v1/boards/${slug}/jobs?content=true`)
+          .then(r => r.ok ? r.json() : Promise.reject())
+          .then(data => (data.jobs || []).map(j => ({
+            id:            `gh-${j.id}`,
+            title:         j.title || '',
+            company:       GH_NAMES[slug],
+            location:      j.location?.name || '',
+            locationType:  locFromStr(j.location?.name || ''),
+            salaryDisplay: ghSalary(j) || 'Not listed',
+            salaryData:    extractSalaryK(ghSalary(j)),
+            posted:        daysAgo(j.updated_at),
+            added:         j.updated_at || new Date().toISOString(),
+            url:           j.absolute_url || '#'
+          })))
+      )
+    );
+    const ghJobs = fetches.filter(r => r.status === 'fulfilled').flatMap(r => r.value);
+    fetches.forEach((r, i) => {
+      if (r.status === 'fulfilled') console.log('[Greenhouse] ' + GH_SLUGS[i] + ':', r.value.length, 'jobs');
+      else console.warn('[Greenhouse] ' + GH_SLUGS[i] + ': failed');
+    });
+    return ghJobs;
+  }
+
+  async function fetchAshby() {
+    const fetches = await Promise.allSettled(
+      ASHBY_SLUGS.map(slug =>
+        fetch(`https://api.ashbyhq.com/posting-api/job-board/${slug}`)
+          .then(r => r.ok ? r.json() : Promise.reject())
+          .then(data => (data.jobs || []).map(j => ({
+            id:            `ashby-${j.id}`,
+            title:         j.title || '',
+            company:       ASHBY_NAMES[slug],
+            location:      j.location || '',
+            isRemote:      j.isRemote || false,
+            locationType:  j.isRemote ? 'remote' : locFromStr(j.workplaceType || ''),
+            salaryDisplay: 'Not listed',
+            salaryData:    0,
+            posted:        daysAgo(j.publishedAt),
+            added:         j.publishedAt || new Date().toISOString(),
+            url:           j.jobUrl || '#'
+          })))
+      )
+    );
+    const ashbyJobs = fetches.filter(r => r.status === 'fulfilled').flatMap(r => r.value);
+    fetches.forEach((r, i) => {
+      if (r.status === 'fulfilled') console.log('[Ashby] ' + ASHBY_SLUGS[i] + ':', r.value.length, 'jobs');
+      else console.warn('[Ashby] ' + ASHBY_SLUGS[i] + ': failed');
+    });
+    return ashbyJobs;
+  }
+
+  // ── Render ────────────────────────────────────────────────
+  function renderCards(jobs) {
+    const container = document.getElementById('cards-container');
+
+    if (!jobs.length) {
+      container.innerHTML = '<p class="loading-state">No matching roles found.</p>';
+      document.querySelector('.listings-count').textContent = '';
+      return;
+    }
+
+    container.innerHTML = jobs.map(buildCard).join('');
+
+    document.querySelectorAll('.job-card').forEach(card => {
+      if (dismissedIds.has(card.dataset.id)) card.classList.add('dismissed');
+      if (appliedState[card.dataset.id])     markApplied(card, appliedState[card.dataset.id]);
+    });
+
+    // New badge logic
+    document.querySelectorAll('.job-card').forEach(card => {
+      if (card.classList.contains('applied')) return;
+      if (new Date(card.dataset.added).getTime() > lastVisitTime) {
+        const badge = document.createElement('span');
+        badge.className   = 'badge badge-new';
+        badge.textContent = 'New';
+        card.querySelector('.card-top').appendChild(badge);
+      }
+    });
+
+    localStorage.setItem('lastVisit', new Date().toISOString());
+    applyFilters();
+  }
+
+  // ── Card builder ──────────────────────────────────────────
+  function buildCard(job) {
+    const id     = esc(job.id);
+    const title  = esc(job.title);
+    const co     = esc(job.company);
+    const loc    = esc(job.location);
+    const url    = esc(job.url);
+    const salary = esc(job.salaryDisplay);
+    const posted = job.posted;
+    const ptxt   = posted === 0 ? 'today' : posted === 1 ? '1 day ago' : `${posted} days ago`;
+    return `<div class="job-card" data-id="${id}" data-url="${url}" data-location="${job.locationType}" data-salary="${job.salaryData}" data-posted="${posted}" data-added="${esc(job.added)}">
+  <div class="card-top">
+    <div>
+      <p class="role-title">${title}</p>
+      <p class="company-name">${co}</p>
+    </div>
+  </div>
+  <div class="meta-row">
+    <span class="meta-item">📍 ${loc}</span>
+    <span class="meta-item">💰 ${salary}</span>
+    <span class="meta-item">🕐 Posted ${ptxt}</span>
+  </div>
+  <hr class="card-divider">
+  <div class="card-bottom">
+    <div class="action-group">
+      <button class="btn btn-primary" data-url="${url}">View listing</button>
+      <button class="btn btn-linkedin" data-company="${co}">Check LinkedIn</button>
+      <button class="btn">Mark as applied</button>
+    </div>
+    <button class="btn btn-ghost">Dismiss</button>
+  </div>
+</div>`;
+  }
+
+  // ── Mark applied ──────────────────────────────────────────
+  function markApplied(card, dateText) {
+    const company = card.querySelector('.company-name').textContent.trim();
+    const url     = card.dataset.url || '#';
+    const cardTop = card.querySelector('.card-top');
+    const badge   = cardTop.querySelector('.badge');
+    const dateEl  = document.createElement('span');
+    dateEl.className   = 'applied-date';
+    dateEl.textContent = `Applied on ${dateText}`;
+    if (badge) badge.replaceWith(dateEl);
+    else cardTop.appendChild(dateEl);
+    card.classList.add('applied');
+    card.querySelector('.action-group').innerHTML =
+      `<button class="btn btn-primary" data-url="${esc(url)}">View listing</button>` +
+      `<button class="btn btn-linkedin" data-company="${esc(company)}">Check LinkedIn</button>`;
+  }
+
+  // ── Filter UI setup ───────────────────────────────────────
+  function setupFilterUI() {
+    const toggleBtn = document.getElementById('toggle-filters');
+    const panel     = document.getElementById('filter-panel');
+    toggleBtn.addEventListener('click', () => {
+      const hidden = panel.classList.contains('hidden');
+      panel.classList.toggle('hidden');
+      toggleBtn.textContent = hidden ? 'More filters ↑' : 'More filters ↓';
+    });
+    document.getElementById('date-pills').addEventListener('click', e => {
+      if (!e.target.classList.contains('filter-pill')) return;
+      document.querySelectorAll('#date-pills .filter-pill').forEach(p => p.classList.remove('active'));
+      e.target.classList.add('active');
+      applyFilters();
+    });
+    document.querySelector('.btn-apply').addEventListener('click', applyFilters);
+    document.querySelector('.btn-clear').addEventListener('click', () => {
+      document.getElementById('filter-location').value = 'any';
+      document.getElementById('filter-salary').value   = '0';
+      document.getElementById('filter-status').value   = 'all';
+      applyFilters();
+    });
+  }
+
+  // ── Filter logic ──────────────────────────────────────────
+  function applyFilters() {
+    const maxDays   = getMaxDays();
+    const location  = document.getElementById('filter-location').value;
+    const minSalary = parseInt(document.getElementById('filter-salary').value, 10);
+    const status    = document.getElementById('filter-status').value;
+    let visible = 0;
+    document.querySelectorAll('.job-card').forEach(card => {
+      const isDismissed = card.classList.contains('dismissed');
+      const isApplied   = card.classList.contains('applied');
+      let passStatus;
+      if      (status === 'dismissed') passStatus = isDismissed;
+      else if (status === 'applied')   passStatus = isApplied && !isDismissed;
+      else                             passStatus = !isDismissed;
+      const passDate     = parseInt(card.dataset.posted, 10) <= maxDays;
+      const passLocation = location === 'any' || card.dataset.location === location;
+      const passSalary   = minSalary === 0 || parseInt(card.dataset.salary, 10) >= minSalary;
+      const show = passStatus && passDate && passLocation && passSalary;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.querySelector('.listings-count').textContent =
+      visible === 1 ? 'Showing 1 role' : `Showing ${visible} roles`;
+  }
+
+  function getMaxDays() {
+    const active = document.querySelector('#date-pills .filter-pill.active');
+    if (!active) return Infinity;
+    const t = active.textContent.trim();
+    if (t === 'Last 7 days')  return 7;
+    if (t === 'Last 14 days') return 14;
+    if (t === 'Last 30 days') return 30;
+    return Infinity;
+  }
+
+  // ── Delegated click actions ───────────────────────────────
+  const appliedDateText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  document.querySelector('.listings-wrap').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    if (btn.classList.contains('btn-primary') && btn.dataset.url) {
+      window.open(btn.dataset.url, '_blank', 'noopener');
+      return;
+    }
+    if (btn.classList.contains('btn-linkedin')) {
+      window.open(`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(btn.dataset.company)}&network=%5B%22F%22%2C%22S%22%5D`, '_blank', 'noopener');
+      return;
+    }
+    if (btn.textContent.trim() === 'Dismiss') {
+      const card = btn.closest('.job-card');
+      card.style.transition = 'opacity 0.25s ease';
+      card.style.opacity    = '0';
+      setTimeout(() => {
+        card.style.transition = '';
+        card.style.opacity    = '';
+        card.classList.add('dismissed');
+        dismissedIds.add(card.dataset.id);
+        localStorage.setItem('dismissedCards', JSON.stringify([...dismissedIds]));
+        applyFilters();
+      }, 260);
+      return;
+    }
+    if (btn.textContent.trim() === 'Mark as applied') {
+      const card = btn.closest('.job-card');
+      markApplied(card, appliedDateText);
+      appliedState[card.dataset.id] = appliedDateText;
+      localStorage.setItem('appliedCards', JSON.stringify(appliedState));
+    }
+  });
+
+  // ── Helpers ───────────────────────────────────────────────
+  function passesTitle(title) {
+    const t = title.toLowerCase();
+    if (EXCLUDE.some(w => t.includes(w))) return false;
+    return INCLUDE.some(w => t.includes(w));
+  }
+
+  const EXCLUDE_LOCATIONS = [
+    'germany','ireland','netherlands','portugal','spain',
+    'united kingdom',' uk','france','australia','canada',
+    'india','brazil','japan','emea','europe'
+  ];
+
+  const US_STATES = /\b(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC)\b/;
+
+  function isUSOrRemote(loc) {
+    if (!loc) return true;
+    const s = loc.toLowerCase();
+    if (/\b(united states|north america|americas|worldwide|anywhere|global)\b/.test(s)) return true;
+    if (EXCLUDE_LOCATIONS.some(term => s.includes(term))) return false;
+    if (/\b(us|remote)\b/.test(s)) return true;
+    if (US_STATES.test(loc)) return true;
+    return false;
+  }
+
+  function deduplicate(jobs) {
+    const seen = new Set();
+    return jobs.filter(j => {
+      const key = `${j.title.toLowerCase()}|${j.company.toLowerCase()}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function locFromStr(str) {
+    const s = (str || '').toLowerCase();
+    if (s.includes('remote')) return 'remote';
+    if (s.includes('hybrid')) return 'hybrid';
+    return 'on-site';
+  }
+
+  function ghSalary(job) {
+    const html = job.content || '';
+    const text = html
+      .replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&')
+      .replace(/&nbsp;/g,' ').replace(/&mdash;/g,'—').replace(/&#39;/g,"'")
+      .replace(/<[^>]+>/g,' ').replace(/\s+/g,' ');
+    const m = text.match(/\$[\d,]+(?:\s*[—\-–]\s*\$[\d,]+)?/);
+    return m ? m[0] : null;
+  }
+
+  function extractSalaryK(str) {
+    if (!str) return 0;
+    const nums = str.replace(/,/g, '').match(/\d+/g);
+    if (!nums) return 0;
+    const max = Math.max(...nums.map(Number));
+    return max >= 1000 ? Math.round(max / 1000) : max;
+  }
+
+  function daysAgo(dateStr) {
+    return Math.max(0, Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000));
+  }
+
+function esc(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+</script>
+
+</body>
+</html>
