@@ -143,33 +143,6 @@
       margin-right: 2px;
     }
 
-    .pill-group {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .filter-pill {
-      padding: 5px 12px;
-      border-radius: 8px;
-      border: 0.5px solid var(--color-border-secondary);
-      font-size: 12px;
-      color: var(--color-text-primary);
-      background: var(--color-background-primary);
-      cursor: pointer;
-      font-family: var(--font-primary);
-      transition: background 0.1s, color 0.1s, border-color 0.1s;
-    }
-
-    .filter-pill:hover:not(.active) {
-      background: var(--color-surface);
-    }
-
-    .filter-pill.active {
-      background: hsl(212, 80%, 33%);
-      color: #fff;
-      border-color: hsl(212, 80%, 33%);
-    }
 
     .btn-more-filters {
       padding: 5px 14px;
@@ -209,6 +182,10 @@
       text-transform: uppercase;
       color: var(--color-text-secondary);
       margin-bottom: 8px;
+    }
+
+    #filter-date {
+      width: auto;
     }
 
     .filter-select {
@@ -447,12 +424,12 @@
   <!-- Filter bar -->
   <div class="filter-bar">
     <span class="filter-label">Posted</span>
-    <div class="pill-group" id="date-pills">
-      <span class="filter-pill active" data-group="date">All</span>
-      <span class="filter-pill" data-group="date">Last 7 days</span>
-      <span class="filter-pill" data-group="date">Last 14 days</span>
-      <span class="filter-pill" data-group="date">Last 30 days</span>
-    </div>
+    <select class="filter-select" id="filter-date">
+      <option value="all">All</option>
+      <option value="7">Last 7 days</option>
+      <option value="14">Last 14 days</option>
+      <option value="30">Last 30 days</option>
+    </select>
     <button class="btn-more-filters" id="toggle-filters">More filters ↓</button>
   </div>
 
@@ -723,14 +700,10 @@
       panel.classList.toggle('hidden');
       toggleBtn.textContent = hidden ? 'More filters ↑' : 'More filters ↓';
     });
-    document.getElementById('date-pills').addEventListener('click', e => {
-      if (!e.target.classList.contains('filter-pill')) return;
-      document.querySelectorAll('#date-pills .filter-pill').forEach(p => p.classList.remove('active'));
-      e.target.classList.add('active');
-      applyFilters();
-    });
+    document.getElementById('filter-date').addEventListener('change', applyFilters);
     document.querySelector('.btn-apply').addEventListener('click', applyFilters);
     document.querySelector('.btn-clear').addEventListener('click', () => {
+      document.getElementById('filter-date').value     = 'all';
       document.getElementById('filter-location').value = 'any';
       document.getElementById('filter-salary').value   = '0';
       document.getElementById('filter-status').value   = 'all';
@@ -764,13 +737,8 @@
   }
 
   function getMaxDays() {
-    const active = document.querySelector('#date-pills .filter-pill.active');
-    if (!active) return Infinity;
-    const t = active.textContent.trim();
-    if (t === 'Last 7 days')  return 7;
-    if (t === 'Last 14 days') return 14;
-    if (t === 'Last 30 days') return 30;
-    return Infinity;
+    const val = document.getElementById('filter-date').value;
+    return val === 'all' ? Infinity : parseInt(val);
   }
 
   // ── Delegated click actions ───────────────────────────────
