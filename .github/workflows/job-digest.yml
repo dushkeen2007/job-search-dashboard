@@ -1,0 +1,19 @@
+name: Weekly job digest
+
+on:
+  schedule:
+    - cron: '0 13 * * 1'  # Every Monday at 9am ET (1pm UTC)
+  workflow_dispatch:        # Also allows manual trigger from GitHub
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Send job digest email
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: node send-digest.js
