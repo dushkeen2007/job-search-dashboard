@@ -12,13 +12,19 @@ const EXCLUDE_LOCATIONS = ['germany','ireland','netherlands','portugal','spain',
 
 const US_STATES = /\b(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC)\b/;
 
-const GH_SLUGS  = ['figma','stripe','vercel','airtable','webflow','brex','intercom','dropbox','mercury','descript','typeform'];
+const GH_SLUGS  = ['figma','stripe','vercel','airtable','webflow','brex','intercom','dropbox',
+                   'mercury','descript','typeform','greenhouse','upwork','instacart',
+                   'pinterest','opentable','calm','squarespace'];
 const GH_NAMES  = { figma:'Figma', stripe:'Stripe', vercel:'Vercel', airtable:'Airtable',
                     webflow:'Webflow', brex:'Brex', intercom:'Intercom', dropbox:'Dropbox',
-                    mercury:'Mercury', descript:'Descript', typeform:'Typeform' };
+                    mercury:'Mercury', descript:'Descript', typeform:'Typeform',
+                    greenhouse:'Greenhouse', upwork:'Upwork', instacart:'Instacart',
+                    pinterest:'Pinterest', opentable:'OpenTable',
+                    calm:'Calm', squarespace:'Squarespace' };
 
-const ASHBY_SLUGS = ['notion','linear','ramp','fathom.video','dovetail'];
-const ASHBY_NAMES = { notion:'Notion', linear:'Linear', ramp:'Ramp', 'fathom.video':'Fathom', dovetail:'Dovetail' };
+const ASHBY_SLUGS = ['notion','linear','ramp','fathom.video','dovetail','betterup','zapier','monarchmoney'];
+const ASHBY_NAMES = { notion:'Notion', linear:'Linear', ramp:'Ramp', 'fathom.video':'Fathom',
+                      dovetail:'Dovetail', betterup:'BetterUp', zapier:'Zapier', monarchmoney:'Monarch' };
 
 function passesTitle(t) {
   const s = t.toLowerCase();
