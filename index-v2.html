@@ -692,13 +692,11 @@
         </select>
       </div>
       <div>
-        <div class="field-label">Seniority</div>
-        <select class="filter-select" id="filter-seniority">
-          <option value="any">Any</option>
-          <option value="senior">Senior</option>
-          <option value="staff">Staff</option>
-          <option value="principal">Principal</option>
-          <option value="lead">Lead</option>
+        <div class="field-label">Status</div>
+        <select class="filter-select" id="filter-status">
+          <option value="all">All</option>
+          <option value="applied">Applied</option>
+          <option value="dismissed">Dismissed</option>
         </select>
       </div>
     </div>
@@ -983,31 +981,35 @@
     document.getElementById('filter-date').addEventListener('change', applyFilters);
     document.querySelector('.btn-apply').addEventListener('click', applyFilters);
     document.querySelector('.btn-clear').addEventListener('click', () => {
-      document.getElementById('filter-date').value      = 'all';
-      document.getElementById('filter-location').value  = 'any';
-      document.getElementById('filter-salary').value    = '0';
-      document.getElementById('filter-seniority').value = 'any';
+      document.getElementById('filter-date').value     = 'all';
+      document.getElementById('filter-location').value = 'any';
+      document.getElementById('filter-salary').value   = '0';
+      document.getElementById('filter-status').value   = 'all';
       applyFilters();
     });
   }
 
   // ── Filter logic ──────────────────────────────────────────
   function applyFilters() {
-    const maxDays    = getMaxDays();
-    const location   = document.getElementById('filter-location').value;
-    const minSalary  = parseInt(document.getElementById('filter-salary').value, 10);
-    const senFilter  = document.getElementById('filter-seniority').value;
-    const query      = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+    const maxDays   = getMaxDays();
+    const location  = document.getElementById('filter-location').value;
+    const minSalary = parseInt(document.getElementById('filter-salary').value, 10);
+    const status    = document.getElementById('filter-status').value;
+    const query     = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
     let visible = 0;
     document.querySelectorAll('.job-card').forEach(card => {
-      const isDismissed  = card.classList.contains('dismissed');
+      const isDismissed = card.classList.contains('dismissed');
+      const isApplied   = card.classList.contains('applied');
+      let passStatus;
+      if      (status === 'dismissed') passStatus = isDismissed;
+      else if (status === 'applied')   passStatus = isApplied && !isDismissed;
+      else                             passStatus = !isDismissed;
       const passDate     = parseInt(card.dataset.posted, 10) <= maxDays;
       const passLocation = location === 'any' || card.dataset.location === location;
       const passSalary   = minSalary === 0 || parseInt(card.dataset.salary, 10) >= minSalary;
-      const passSen      = senFilter === 'any' || card.dataset.seniority === senFilter;
       const cardText     = card.textContent.toLowerCase();
       const passSearch   = !query || cardText.includes(query);
-      const show = !isDismissed && passDate && passLocation && passSalary && passSen && passSearch;
+      const show = passStatus && passDate && passLocation && passSalary && passSearch;
       card.style.display = show ? '' : 'none';
       if (show) visible++;
     });
