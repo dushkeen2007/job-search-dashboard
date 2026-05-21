@@ -279,129 +279,6 @@
       display: none;
     }
 
-    /* ============================================
-       Mobile nav
-       ============================================ */
-
-    @media (max-width: 600px) {
-      .top-bar-inner {
-        padding: 14px var(--mobile-gutter);
-      }
-
-      .page-wrap {
-        padding: var(--space-5) var(--mobile-gutter) var(--space-12);
-      }
-
-      /* Hide desktop search + sync label on mobile */
-      .search-wrap,
-      .sync-label {
-        display: none;
-      }
-
-      /* Show mobile search icon */
-      .btn-search-mobile {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--border);
-        background: var(--bg-muted);
-        color: var(--fg-subtle);
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: border-color 0.15s, color 0.15s;
-      }
-
-      .btn-search-mobile:hover {
-        border-color: rgba(245, 158, 11, 0.4);
-        color: var(--fg);
-      }
-
-      /* Search active state: slide in full-width search bar */
-      .top-bar-inner.search-open .top-bar-brand,
-      .top-bar-inner.search-open .top-bar-sep,
-      .top-bar-inner.search-open .top-bar-descriptor,
-      .top-bar-inner.search-open .top-bar-right {
-        display: none;
-      }
-
-      .top-bar-inner.search-open .mobile-search-bar {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-        width: 100%;
-      }
-
-      .mobile-search-back {
-        width: 28px;
-        height: 28px;
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--border);
-        background: var(--bg-muted);
-        color: var(--fg-subtle);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: border-color 0.15s, color 0.15s;
-      }
-
-      .mobile-search-back:hover {
-        border-color: rgba(245, 158, 11, 0.4);
-        color: var(--fg);
-      }
-
-      .mobile-search-input-wrap {
-        position: relative;
-        flex: 1;
-        display: flex;
-        align-items: center;
-      }
-
-      .mobile-search-icon {
-        position: absolute;
-        left: 8px;
-        color: var(--fg-disabled);
-        pointer-events: none;
-      }
-
-      .mobile-search-input {
-        width: 100%;
-        height: 34px;
-        padding: 0 32px 0 28px;
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--accent);
-        background: var(--bg-input);
-        font-family: var(--font-sans);
-        font-size: var(--text-md);
-        color: var(--fg);
-        outline: none;
-      }
-
-      .mobile-search-input::placeholder { color: var(--fg-disabled); }
-
-      .mobile-search-clear {
-        position: absolute;
-        right: 6px;
-        width: 18px;
-        height: 18px;
-        border-radius: 3px;
-        border: none;
-        background: var(--bg-muted);
-        color: var(--fg-subtle);
-        font-size: 10px;
-        cursor: pointer;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-      }
-
-      .mobile-search-clear.visible { display: flex; }
-    }
 
     .search-clear {
       position: absolute;
@@ -752,6 +629,131 @@
     }
 
     .hidden { display: none; }
+
+    /* ============================================
+       Mobile nav — MUST stay at end of stylesheet
+       so these overrides beat the desktop rules above
+       ============================================ */
+
+    @media (max-width: 600px) {
+      .top-bar-inner {
+        padding: 14px var(--mobile-gutter);
+      }
+
+      .page-wrap {
+        padding: var(--space-5) var(--mobile-gutter) var(--space-12);
+      }
+
+      /* Hide desktop search + sync label on mobile */
+      .search-wrap,
+      .sync-label {
+        display: none;
+      }
+
+      /* Show mobile search icon */
+      .btn-search-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: var(--bg-muted);
+        color: var(--fg-subtle);
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: border-color 0.15s, color 0.15s;
+      }
+
+      .btn-search-mobile:hover {
+        border-color: rgba(245, 158, 11, 0.4);
+        color: var(--fg);
+      }
+
+      /* Search active state: slide in full-width search bar */
+      .top-bar-inner.search-open .top-bar-brand,
+      .top-bar-inner.search-open .top-bar-sep,
+      .top-bar-inner.search-open .top-bar-descriptor,
+      .top-bar-inner.search-open .top-bar-right {
+        display: none;
+      }
+
+      .top-bar-inner.search-open .mobile-search-bar {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        width: 100%;
+      }
+
+      .mobile-search-back {
+        width: 28px;
+        height: 28px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: var(--bg-muted);
+        color: var(--fg-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: border-color 0.15s, color 0.15s;
+      }
+
+      .mobile-search-back:hover {
+        border-color: rgba(245, 158, 11, 0.4);
+        color: var(--fg);
+      }
+
+      .mobile-search-input-wrap {
+        position: relative;
+        flex: 1;
+        display: flex;
+        align-items: center;
+      }
+
+      .mobile-search-icon {
+        position: absolute;
+        left: 8px;
+        color: var(--fg-disabled);
+        pointer-events: none;
+      }
+
+      .mobile-search-input {
+        width: 100%;
+        height: 34px;
+        padding: 0 32px 0 28px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--accent);
+        background: var(--bg-input);
+        font-family: var(--font-sans);
+        font-size: var(--text-md);
+        color: var(--fg);
+        outline: none;
+      }
+
+      .mobile-search-input::placeholder { color: var(--fg-disabled); }
+
+      .mobile-search-clear {
+        position: absolute;
+        right: 6px;
+        width: 18px;
+        height: 18px;
+        border-radius: 3px;
+        border: none;
+        background: var(--bg-muted);
+        color: var(--fg-subtle);
+        font-size: 10px;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .mobile-search-clear.visible { display: flex; }
+    }
 
   </style>
 </head>
