@@ -137,6 +137,11 @@
       z-index: 100;
       background: var(--bg-elevated);
       border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .top-bar-inner {
+      max-width: var(--site-max-width);
+      margin: 0 auto;
       padding: 40px var(--page-padding);
       display: flex;
       align-items: center;
@@ -623,6 +628,7 @@
 
 <!-- Top nav bar -->
 <nav class="top-bar">
+<div class="top-bar-inner">
   <div class="top-bar-brand">
     <div class="brand-logo">H</div>
     <span class="brand-name">Hunt</span>
@@ -646,6 +652,7 @@
       <button class="search-clear" id="search-clear">✕</button>
     </div>
   </div>
+</div>
 </nav>
 
 <div class="page-wrap">
