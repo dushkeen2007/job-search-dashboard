@@ -110,6 +110,7 @@
       /* Layout */
       --site-max-width: 960px;
       --page-padding:   40px;
+      --mobile-gutter:  16px;
     }
 
     /* ============================================
@@ -284,11 +285,11 @@
 
     @media (max-width: 600px) {
       .top-bar-inner {
-        padding: 20px var(--space-4);
+        padding: 14px var(--mobile-gutter);
       }
 
       .page-wrap {
-        padding: var(--space-6) var(--space-4) var(--space-12);
+        padding: var(--space-5) var(--mobile-gutter) var(--space-12);
       }
 
       /* Hide desktop search + sync label on mobile */
