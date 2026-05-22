@@ -1055,6 +1055,7 @@
   const OLLAMA_MODEL = 'llama3.1:8b'; // change to match your installed Ollama model
   let resumeText = localStorage.getItem('hunt_resume') || '';
   let jobsData   = {};
+  let scoresCache = JSON.parse(localStorage.getItem('hunt_scores') || '{}');
 
   const EXCLUDE = ['engineer','developer','manager','director','researcher',
                    'writer','intern','junior','coordinator'];
@@ -1275,6 +1276,8 @@
         if (btn) { btn.innerHTML = SVG_EYE; btn.title = 'Restore'; }
       }
       if (appliedState[card.dataset.id]) markApplied(card, appliedState[card.dataset.id]);
+      const cached = scoresCache[card.dataset.id];
+      if (cached) renderScoreRow(card.querySelector('.score-row'), cached.score, cached.gaps);
     });
 
     document.querySelectorAll('.job-card').forEach(card => {
@@ -1609,14 +1612,21 @@ Scoring: 80-100 strong match · 60-79 decent match · below 60 significant gaps.
       const result = JSON.parse(match[0]);
       const score  = Math.max(0, Math.min(100, parseInt(result.score, 10) || 0));
       const gaps   = Array.isArray(result.gaps) ? result.gaps.slice(0, 2) : [];
-      const cls    = score >= 80 ? 'score-high' : score >= 60 ? 'score-mid' : 'score-low';
-      const gapHtml = gaps.map(g => `<span class="score-gap">${esc(String(g))}</span>`).join('');
-      scoreRow.innerHTML = `<button class="score-badge ${cls}" title="Click to re-score">${score}% match</button>${gapHtml}`;
+      scoresCache[id] = { score, gaps };
+      localStorage.setItem('hunt_scores', JSON.stringify(scoresCache));
+      renderScoreRow(scoreRow, score, gaps);
       if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Score'; }
     } catch {
       scoreRow.innerHTML = '<span class="score-status">Scoring failed — is Ollama running?</span>';
       if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Score'; }
     }
+  }
+
+  function renderScoreRow(scoreRow, score, gaps) {
+    const cls     = score >= 80 ? 'score-high' : score >= 60 ? 'score-mid' : 'score-low';
+    const gapHtml = gaps.map(g => `<span class="score-gap">${esc(String(g))}</span>`).join('');
+    scoreRow.innerHTML = `<button class="score-badge ${cls}" title="Click to re-score">${score}% match</button>${gapHtml}`;
+    scoreRow.classList.remove('hidden');
   }
 
   async function scoreAllVisible() {
