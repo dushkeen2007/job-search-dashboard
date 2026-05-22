@@ -1036,6 +1036,7 @@
     <p class="modal-subtitle">Paste your resume text. It's saved locally in your browser and used to score job listings against your experience.</p>
     <textarea class="resume-textarea" id="resume-input" placeholder="Paste your full resume here…"></textarea>
     <div class="modal-footer">
+      <button class="btn" id="resume-clear-scores" style="margin-right:auto;color:var(--fg-subtle)">Clear scores</button>
       <button class="btn" id="resume-cancel">Cancel</button>
       <button class="btn btn-primary" id="resume-save">Save resume</button>
     </div>
@@ -1552,6 +1553,20 @@
       resumeText = textarea.value.trim();
       localStorage.setItem('hunt_resume', resumeText);
       updateResumeIndicator();
+      closeModal();
+    });
+
+    document.getElementById('resume-clear-scores').addEventListener('click', () => {
+      scoresCache = {};
+      localStorage.removeItem('hunt_scores');
+      document.querySelectorAll('.score-row').forEach(row => {
+        row.innerHTML = '';
+        row.classList.add('hidden');
+      });
+      document.querySelectorAll('.btn-score').forEach(btn => {
+        btn.disabled = false;
+        btn.textContent = 'Score';
+      });
       closeModal();
     });
 
