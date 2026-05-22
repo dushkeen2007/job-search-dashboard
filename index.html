@@ -1299,10 +1299,10 @@
   <hr class="card-divider">
   <div class="card-bottom">
     <div class="action-group">
-      <button class="btn btn-primary" data-url="${url}">View listing</button>
-      <button class="btn btn-score">Score match</button>
+      <button class="btn btn-primary" data-url="${url}">Details</button>
+      <button class="btn btn-score">Score</button>
       <button class="btn btn-linkedin" data-company="${co}">LinkedIn</button>
-      <button class="btn">Mark applied</button>
+      <button class="btn">Applied</button>
     </div>
     <button class="btn btn-ghost">Dismiss</button>
   </div>
@@ -1322,7 +1322,7 @@
     else cardTop.appendChild(dateEl);
     card.classList.add('applied');
     card.querySelector('.action-group').innerHTML =
-      `<button class="btn btn-primary" data-url="${esc(url)}">View listing</button>` +
+      `<button class="btn btn-primary" data-url="${esc(url)}">Details</button>` +
       `<button class="btn btn-linkedin" data-company="${esc(company)}">LinkedIn</button>`;
   }
 
@@ -1411,7 +1411,7 @@
       }, 210);
       return;
     }
-    if (btn.textContent.trim() === 'Mark applied') {
+    if (btn.textContent.trim() === 'Applied') {
       const card = btn.closest('.job-card');
       markApplied(card, appliedDateText);
       appliedState[card.dataset.id] = appliedDateText;
@@ -1582,10 +1582,10 @@ Scoring: 80-100 strong match · 60-79 decent match · below 60 significant gaps.
       const cls    = score >= 80 ? 'score-high' : score >= 60 ? 'score-mid' : 'score-low';
       const gapHtml = gaps.map(g => `<span class="score-gap">${esc(String(g))}</span>`).join('');
       scoreRow.innerHTML = `<button class="score-badge ${cls}" title="Click to re-score">${score}% match</button>${gapHtml}`;
-      if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Re-score'; }
+      if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Score'; }
     } catch {
       scoreRow.innerHTML = '<span class="score-status">Scoring failed — is Ollama running?</span>';
-      if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Score match'; }
+      if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Score'; }
     }
   }
 
