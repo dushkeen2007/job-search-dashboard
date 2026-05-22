@@ -1036,6 +1036,9 @@
 </div>
 
 <script>
+  const SVG_EYE_OFF = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+  const SVG_EYE     = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+
   // ── Persistent state ──────────────────────────────────────
   const dismissedIds  = new Set(JSON.parse(localStorage.getItem('dismissedCards') || '[]'));
   const appliedState  = JSON.parse(localStorage.getItem('appliedCards') || '{}');
@@ -1259,8 +1262,12 @@
     container.innerHTML = jobs.map(buildCard).join('');
 
     document.querySelectorAll('.job-card').forEach(card => {
-      if (dismissedIds.has(card.dataset.id)) card.classList.add('dismissed');
-      if (appliedState[card.dataset.id])     markApplied(card, appliedState[card.dataset.id]);
+      if (dismissedIds.has(card.dataset.id)) {
+        card.classList.add('dismissed');
+        const btn = card.querySelector('.btn-dismiss');
+        if (btn) { btn.innerHTML = SVG_EYE; btn.title = 'Restore'; }
+      }
+      if (appliedState[card.dataset.id]) markApplied(card, appliedState[card.dataset.id]);
     });
 
     document.querySelectorAll('.job-card').forEach(card => {
@@ -1309,7 +1316,7 @@
       <button class="btn btn-linkedin" data-company="${co}">LinkedIn</button>
       <button class="btn">Applied</button>
     </div>
-    <button class="btn btn-ghost btn-dismiss" title="Dismiss"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+    <button class="btn btn-ghost btn-dismiss" title="Dismiss">${SVG_EYE_OFF}</button>
   </div>
 </div>`;
   }
@@ -1404,16 +1411,27 @@
     }
     if (btn.classList.contains('btn-dismiss')) {
       const card = btn.closest('.job-card');
-      card.style.transition = 'opacity 0.2s ease';
-      card.style.opacity    = '0';
-      setTimeout(() => {
-        card.style.transition = '';
-        card.style.opacity    = '';
-        card.classList.add('dismissed');
-        dismissedIds.add(card.dataset.id);
+      if (card.classList.contains('dismissed')) {
+        card.classList.remove('dismissed');
+        dismissedIds.delete(card.dataset.id);
         localStorage.setItem('dismissedCards', JSON.stringify([...dismissedIds]));
+        btn.innerHTML = SVG_EYE_OFF;
+        btn.title = 'Dismiss';
         applyFilters();
-      }, 210);
+      } else {
+        card.style.transition = 'opacity 0.2s ease';
+        card.style.opacity    = '0';
+        setTimeout(() => {
+          card.style.transition = '';
+          card.style.opacity    = '';
+          card.classList.add('dismissed');
+          dismissedIds.add(card.dataset.id);
+          localStorage.setItem('dismissedCards', JSON.stringify([...dismissedIds]));
+          btn.innerHTML = SVG_EYE;
+          btn.title = 'Restore';
+          applyFilters();
+        }, 210);
+      }
       return;
     }
     if (btn.textContent.trim() === 'Applied') {
