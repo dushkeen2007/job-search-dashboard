@@ -95,23 +95,31 @@ function deduplicate(jobs) {
 
 function buildEmailHtml(jobs, dateRange) {
   if (!jobs.length) {
-    return `<p style="font-family:sans-serif;">No matching roles this week.</p>`;
+    return `<div style="background:#09090b;padding:32px;font-family:ui-sans-serif,system-ui,sans-serif;">
+      <p style="color:#71717a;font-size:14px;margin:0;">No matching roles this week.</p>
+    </div>`;
   }
+
   const cards = jobs.map(j => `
-    <div style="border:1px solid #e5e5e5;border-radius:8px;padding:16px 20px;margin-bottom:12px;background:#faf6f1;">
-      <p style="margin:0 0 4px;font-size:15px;font-weight:600;color:#0c1a0a;font-family:sans-serif;">${j.title}</p>
-      <p style="margin:0 0 8px;font-size:13px;color:#6b7280;font-family:sans-serif;">${j.company} &middot; ${j.location || 'Remote'}</p>
-      <p style="margin:0 0 12px;font-size:12px;color:#9ca3af;font-family:sans-serif;">Posted ${j.posted === 0 ? 'today' : j.posted === 1 ? '1 day ago' : `${j.posted} days ago`}</p>
-      <a href="${j.url}" style="display:inline-block;padding:7px 14px;background:#1a56a0;color:#fff;border-radius:6px;font-size:13px;text-decoration:none;font-family:sans-serif;">View listing</a>
+    <div style="background:#111114;border:1px solid #1f1f23;border-radius:10px;padding:16px 20px;margin-bottom:10px;">
+      <p style="margin:0 0 3px;font-size:15px;font-weight:600;color:#fafafa;font-family:ui-sans-serif,system-ui,sans-serif;letter-spacing:-0.01em;">${j.title}</p>
+      <p style="margin:0 0 12px;font-size:13px;color:#a1a1aa;font-family:ui-sans-serif,system-ui,sans-serif;">${j.company}&nbsp;&middot;&nbsp;${j.location || 'Remote'}&nbsp;&middot;&nbsp;${j.posted === 0 ? 'today' : j.posted === 1 ? '1d ago' : `${j.posted}d ago`}</p>
+      <a href="${j.url}" style="display:inline-block;padding:6px 14px;background:#f59e0b;color:#1a1206;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;font-family:ui-sans-serif,system-ui,sans-serif;">View listing</a>
     </div>
   `).join('');
 
   return `
-    <div style="max-width:600px;margin:0 auto;padding:24px;font-family:sans-serif;">
-      <h2 style="font-size:18px;font-weight:700;color:#0c1a0a;margin-bottom:4px;">Product designer job digest</h2>
-      <p style="font-size:13px;color:#6b7280;margin-bottom:24px;">${dateRange}</p>
-      ${cards}
-      <p style="font-size:13px;color:#9ca3af;margin-top:24px;">${jobs.length} ${jobs.length === 1 ? 'role' : 'roles'} found this week.</p>
+    <div style="background:#09090b;margin:0;padding:0;">
+      <div style="max-width:600px;margin:0 auto;padding:32px 24px;font-family:ui-sans-serif,system-ui,sans-serif;">
+        <div style="margin-bottom:24px;">
+          <span style="display:inline-block;width:32px;height:32px;background:#f59e0b;border-radius:6px;font-size:16px;font-weight:700;color:#1a1206;text-align:center;line-height:32px;vertical-align:middle;">H</span>
+          <span style="display:inline-block;font-size:16px;font-weight:600;color:#fafafa;vertical-align:middle;margin-left:8px;letter-spacing:-0.01em;">Hunt</span>
+        </div>
+        <h2 style="font-size:18px;font-weight:600;color:#fafafa;margin:0 0 4px;letter-spacing:-0.01em;">Job digest</h2>
+        <p style="font-size:13px;color:#71717a;margin:0 0 24px;">${dateRange}</p>
+        ${cards}
+        <p style="font-size:12px;color:#52525b;margin-top:20px;">${jobs.length} ${jobs.length === 1 ? 'role' : 'roles'} posted in the last 7 days.</p>
+      </div>
     </div>
   `;
 }
