@@ -1567,6 +1567,7 @@
         btn.disabled = false;
         btn.textContent = 'Score';
       });
+      updateResumeIndicator();
       closeModal();
     });
 
@@ -1576,8 +1577,10 @@
   function updateResumeIndicator() {
     const dot = document.getElementById('resume-dot');
     const scoreAllBtn = document.getElementById('score-all-btn');
+    const clearBtn = document.getElementById('resume-clear-scores');
     if (dot) dot.style.display = resumeText ? 'block' : 'none';
     if (scoreAllBtn) scoreAllBtn.classList.toggle('hidden', !resumeText);
+    if (clearBtn) clearBtn.disabled = !resumeText || Object.keys(scoresCache).length === 0;
   }
 
   async function scoreJob(cardEl) {
@@ -1630,6 +1633,7 @@ Scoring: 80-100 strong match · 60-79 decent match · below 60 significant gaps.
       scoresCache[id] = { score, gaps };
       localStorage.setItem('hunt_scores', JSON.stringify(scoresCache));
       renderScoreRow(scoreRow, score, gaps);
+      updateResumeIndicator();
       if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Score'; }
     } catch {
       scoreRow.innerHTML = '<span class="score-status">Scoring failed — is Ollama running?</span>';
