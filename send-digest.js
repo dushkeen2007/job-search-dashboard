@@ -148,9 +148,9 @@ async function main() {
     method:  'POST',
     headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from:    'Job Digest <onboarding@resend.dev>',
+      from:    'Hunt Job board <onboarding@resend.dev>',
       to:      TO_EMAIL,
-      subject: `Product designer job digest — ${today}`,
+      subject: `Hunt Job board — Product designer digest ${today}`,
       html
     })
   });
