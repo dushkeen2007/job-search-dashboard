@@ -770,11 +770,30 @@
       cursor: pointer;
       font-family: var(--font-sans);
       padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
       transition: color 0.15s;
     }
     .btn-score-all:hover { color: var(--accent); }
-    .btn-score-all:disabled { color: var(--fg-disabled); cursor: default; }
+    .btn-score-all:disabled { color: var(--fg-disabled); cursor: default; pointer-events: none; }
     .btn-score-all.hidden { display: none; }
+    .btn-score-all .score-all-check {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1.5px solid var(--fg-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-score-all.scored .score-all-check {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-score-all:hover .score-all-check { border-color: var(--accent); }
 
     /* ============================================
        Mobile nav — MUST stay at end of stylesheet
@@ -1026,7 +1045,12 @@
   <div class="listings-wrap">
     <div class="listings-header">
       <p class="listings-count"></p>
-      <button class="btn-score-all hidden" id="score-all-btn">Score all visible</button>
+      <button class="btn-score-all hidden" id="score-all-btn">
+        <span class="score-all-check">
+          <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="score-all-tick" style="display:none"><polyline points="1.5,5 4,7.5 8.5,2"/></svg>
+        </span>
+        <span class="score-all-label">Score all visible</span>
+      </button>
     </div>
     <div id="cards-container">
       <p class="loading-state">Loading roles…</p>
@@ -1590,6 +1614,7 @@
     if (dot) dot.style.display = resumeText ? 'block' : 'none';
     if (scoreAllBtn) scoreAllBtn.classList.toggle('hidden', !resumeText);
     if (clearBtn) clearBtn.disabled = !resumeText || Object.keys(scoresCache).length === 0;
+    updateScoreAllBtn();
   }
 
   async function scoreJob(cardEl) {
@@ -1657,18 +1682,48 @@ Scoring: 80-100 strong match · 60-79 decent match · below 60 significant gaps.
     scoreRow.classList.remove('hidden');
   }
 
+  function updateScoreAllBtn() {
+    const btn = document.getElementById('score-all-btn');
+    if (!btn) return;
+    const hasScores = Object.keys(scoresCache).length > 0;
+    const label = btn.querySelector('.score-all-label');
+    const tick  = btn.querySelector('.score-all-tick');
+    btn.classList.toggle('scored', hasScores);
+    if (label) label.textContent = hasScores ? 'Clear all scores' : 'Score all visible';
+    if (tick)  tick.style.display = hasScores ? 'block' : 'none';
+  }
+
   async function scoreAllVisible() {
-    const btn   = document.getElementById('score-all-btn');
+    const btn = document.getElementById('score-all-btn');
+
+    // Toggle: if scores exist, clear them
+    if (Object.keys(scoresCache).length > 0) {
+      scoresCache = {};
+      localStorage.removeItem('hunt_scores');
+      document.querySelectorAll('.score-row').forEach(row => {
+        row.innerHTML = '';
+        row.classList.add('hidden');
+      });
+      document.querySelectorAll('.btn-score').forEach(b => {
+        b.disabled = false;
+        b.textContent = 'Score';
+      });
+      updateScoreAllBtn();
+      updateResumeIndicator();
+      return;
+    }
+
     const cards = [...document.querySelectorAll('.job-card')]
       .filter(c => c.style.display !== 'none' && !c.classList.contains('dismissed'));
     if (!cards.length) return;
+    const label = btn.querySelector('.score-all-label');
     btn.disabled = true;
     for (let i = 0; i < cards.length; i++) {
-      btn.textContent = `Scoring ${i + 1} / ${cards.length}…`;
+      if (label) label.textContent = `Scoring ${i + 1} / ${cards.length}…`;
       await scoreJob(cards[i]);
     }
     btn.disabled = false;
-    btn.textContent = 'Score all visible';
+    updateScoreAllBtn();
   }
 
   function stripHtml(html) {
