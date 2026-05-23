@@ -1287,7 +1287,11 @@
       }
       if (appliedState[card.dataset.id]) markApplied(card, appliedState[card.dataset.id]);
       const cached = scoresCache[card.dataset.id];
-      if (cached) renderScoreRow(card.querySelector('.score-row'), cached.score, cached.gaps);
+      if (cached) {
+        renderScoreRow(card.querySelector('.score-row'), cached.score, cached.gaps);
+        const scoreBtn = card.querySelector('.btn-score');
+        if (scoreBtn) scoreBtn.disabled = true;
+      }
     });
 
     document.querySelectorAll('.job-card').forEach(card => {
@@ -1643,7 +1647,7 @@ Scoring: 80-100 strong match · 60-79 decent match · below 60 significant gaps.
       localStorage.setItem('hunt_scores', JSON.stringify(scoresCache));
       renderScoreRow(scoreRow, score, gaps);
       updateResumeIndicator();
-      if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Score'; }
+      if (scoreBtn) { scoreBtn.disabled = true; scoreBtn.textContent = 'Score'; }
     } catch {
       scoreRow.innerHTML = '<span class="score-status">Scoring failed — is Ollama running?</span>';
       if (scoreBtn) { scoreBtn.disabled = false; scoreBtn.textContent = 'Score'; }
