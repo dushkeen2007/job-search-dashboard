@@ -120,6 +120,8 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html { overflow-x: hidden; }
+
     body {
       font-family: var(--font-sans);
       font-size: var(--text-base);
@@ -127,7 +129,7 @@
       color: var(--fg-muted);
       background: var(--bg);
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      width: 100%;
     }
 
     /* ============================================
@@ -1146,11 +1148,13 @@
 
     openBtn.addEventListener('click', () => {
       topBarInner.classList.add('search-open');
+      document.body.style.overflowX = 'hidden';
       mobileInput.focus();
     });
 
     closeBtn.addEventListener('click', () => {
       topBarInner.classList.remove('search-open');
+      document.body.style.overflowX = '';
       mobileInput.value = '';
       mobileClear.classList.remove('visible');
       applyFilters();
