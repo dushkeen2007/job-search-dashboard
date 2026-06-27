@@ -1174,12 +1174,13 @@
 
   // ── Fetch all sources simultaneously ──────────────────────
   async function fetchJobs() {
-    const [greenhouse, ashby] = await Promise.allSettled([
+    const [greenhouse, ashby, linkedin] = await Promise.allSettled([
       fetchGreenhouse(),
-      fetchAshby()
+      fetchAshby(),
+      fetchLinkedIn()
     ]);
 
-    const sources = [greenhouse, ashby];
+    const sources = [greenhouse, ashby, linkedin];
 
     if (sources.every(r => r.status === 'rejected')) {
       document.getElementById('cards-container').innerHTML =
@@ -1188,8 +1189,8 @@
       return;
     }
 
-    const sourceNames = ['Greenhouse', 'Ashby'];
-    const sourcedJobs = [greenhouse, ashby].map((r, i) => ({
+    const sourceNames = ['Greenhouse', 'Ashby', 'LinkedIn'];
+    const sourcedJobs = [greenhouse, ashby, linkedin].map((r, i) => ({
       name: sourceNames[i],
       jobs: r.status === 'fulfilled' ? r.value : []
     }));
@@ -1276,6 +1277,14 @@
     return ashbyJobs;
   }
 
+  async function fetchLinkedIn() {
+    const res = await fetch('linkedin-jobs.json');
+    if (!res.ok) throw new Error('linkedin-jobs.json not found');
+    const jobs = await res.json();
+    console.log('[LinkedIn] loaded:', jobs.length, 'jobs');
+    return jobs;
+  }
+
   // ── Render ────────────────────────────────────────────────
   function renderCards(jobs) {
     const container = document.getElementById('cards-container');
@@ -1330,7 +1339,7 @@
     const salary = esc(job.salaryDisplay);
     const posted = job.posted;
     const ptxt   = posted === 0 ? 'today' : posted === 1 ? '1d ago' : `${posted}d ago`;
-    const source = job.id.startsWith('gh-') ? 'Greenhouse' : 'Ashby';
+    const source = job.id.startsWith('gh-') ? 'Greenhouse' : job.id.startsWith('li-') ? 'LinkedIn' : 'Ashby';
     return `<div class="job-card" data-id="${id}" data-url="${url}" data-location="${job.locationType}" data-salary="${job.salaryData}" data-posted="${posted}" data-added="${esc(job.added)}" data-seniority="${seniority(job.title)}">
   <div class="card-top">
     <div>

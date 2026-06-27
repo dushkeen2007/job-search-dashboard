@@ -1,0 +1,28 @@
+name: Hunt — Scrape LinkedIn Jobs
+
+on:
+  schedule:
+    - cron: '0 10 * * *'  # Every day at 10am UTC (6am ET)
+  workflow_dispatch:        # Manual trigger from GitHub Actions tab
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Scrape LinkedIn jobs via Apify
+        env:
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: node scrape-linkedin.js
+      - name: Commit updated linkedin-jobs.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add linkedin-jobs.json
+          git diff --cached --quiet || git commit -m "chore: refresh LinkedIn jobs [skip ci]"
+          git push
