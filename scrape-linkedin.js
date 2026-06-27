@@ -76,7 +76,7 @@ function normalize(items) {
     salaryData:    0,
     posted:        j.postedAt ? Math.max(0, Math.floor((Date.now() - new Date(j.postedAt)) / 86400000)) : 0,
     added:         j.postedAt || new Date().toISOString(),
-    url:           j.jobUrl || j.url || '#',
+    url:           j.jobUrl || j.url || (j.id ? `https://www.linkedin.com/jobs/view/${j.id}/` : '#'),
     description:   (j.descriptionText || j.description || '').slice(0, 3000)
   }));
 }
