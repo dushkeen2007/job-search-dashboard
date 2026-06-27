@@ -32,7 +32,7 @@ async function startRun() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' }
   }, {
-    searchUrls: [{ url: SEARCH_URL }],
+    urls: [SEARCH_URL],
     maxJobs: MAX_JOBS
   });
   if (res.status !== 201) throw new Error('Failed to start run: ' + JSON.stringify(res.body));
