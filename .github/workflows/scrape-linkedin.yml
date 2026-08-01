@@ -1,8 +1,11 @@
 name: Hunt — Scrape LinkedIn Jobs
 
 on:
-  schedule:
-    - cron: '0 10 * * *'  # Every day at 10am UTC (6am ET)
+  # Daily schedule paused (August 1, 2026) — Apify credits ran out and this
+  # scraper was a proof of concept, not something the dashboard depends on.
+  # To resume automatic runs, add back:
+  #   schedule:
+  #     - cron: '0 10 * * *'  # Every day at 10am UTC (6am ET)
   workflow_dispatch:        # Manual trigger from GitHub Actions tab
 
 jobs:
